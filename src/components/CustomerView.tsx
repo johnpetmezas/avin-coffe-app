@@ -9,12 +9,13 @@ import { ProfileView } from './ProfileView';
 
 interface CustomerViewProps {
   onPlaceOrder: (items: any[], arrivalTime: string, notes: string) => void;
+  onEditOrder: (id: string, items: OrderItem[], arrivalTime: string, notes: string) => void;
   activeOrder: Order | null;
   history: Order[];
   onCancelOrder: (id: string) => void;
 }
 
-export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, activeOrder, history, onCancelOrder }) => {
+export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEditOrder, activeOrder, history, onCancelOrder }) => {
   const [activeTab, setActiveTab] = useState<'menu' | 'profile'>('menu');
   const [cart, setCart] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -141,18 +142,18 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, active
               activeOrder={activeOrder} 
               history={history}
               onTrackOrder={() => setShowTracking(true)}
+              onCancelOrder={onCancelOrder}
+              onEditOrder={onEditOrder}
             />
-            {!showTracking && (
-              <div className="flex justify-center pb-10">
-                <button 
-                  onClick={() => setActiveTab('menu')}
-                  className="bg-brand-black text-white px-8 py-4 rounded-[32px] flex items-center gap-3 font-black text-[10px] uppercase tracking-[0.2em] active:bg-brand-black/90 transition-colors"
-                >
-                  <ShoppingBag size={18} />
-                  Επιστροφη στον Καταλογο
-                </button>
-              </div>
-            )}
+            <div className="flex justify-center pb-10">
+              <button 
+                onClick={() => setActiveTab('menu')}
+                className="bg-brand-black text-white px-8 py-4 rounded-[32px] flex items-center gap-3 font-black text-[10px] uppercase tracking-[0.2em] active:bg-brand-black/90 transition-colors"
+              >
+                <ShoppingBag size={18} />
+                Επιστροφη στον Καταλογο
+              </button>
+            </div>
           </div>
         )}
       </main>
