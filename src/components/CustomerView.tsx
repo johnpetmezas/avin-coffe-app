@@ -98,9 +98,9 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, active
                     </div>
                   </div>
                   <button
-                    className="bg-brand-black text-white w-10 h-10 rounded-xl flex items-center justify-center active:bg-brand-black/80 transition-colors"
+                    className="plusButton"
                   >
-                    <Plus size={20} strokeWidth={3} />
+                    <Plus className="plusIcon" strokeWidth={3} />
                   </button>
                 </div>
               ))}
