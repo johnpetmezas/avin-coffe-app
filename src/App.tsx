@@ -179,6 +179,10 @@ export default function App() {
     } catch { /* local only */ }
   };
 
+  const deleteOrder = (id: string) => {
+    setOrders(prev => prev.filter(o => o.id !== id));
+  };
+
   const history = orders.filter(o => o.status === 'completed' || o.status === 'cancelled');
 
   return (
@@ -212,6 +216,7 @@ export default function App() {
               activeOrder={activeOrder}
               history={history}
               onCancelOrder={cancelOrder}
+              onDeleteOrder={deleteOrder}
             />
           </motion.div>
         ) : (

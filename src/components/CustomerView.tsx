@@ -13,9 +13,10 @@ interface CustomerViewProps {
   activeOrder: Order | null;
   history: Order[];
   onCancelOrder: (id: string) => void;
+  onDeleteOrder: (id: string) => void;
 }
 
-export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEditOrder, activeOrder, history, onCancelOrder }) => {
+export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEditOrder, activeOrder, history, onCancelOrder, onDeleteOrder }) => {
   const [activeTab, setActiveTab] = useState<'menu' | 'profile'>('menu');
   const [cart, setCart] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -144,6 +145,7 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEdit
               onTrackOrder={() => setShowTracking(true)}
               onCancelOrder={onCancelOrder}
               onEditOrder={onEditOrder}
+              onDeleteOrder={onDeleteOrder}
             />
             <div className="flex justify-center pb-10">
               <button 

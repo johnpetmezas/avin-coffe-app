@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Clock, Check, Package, Coffee, ChevronRight,
-  XCircle, RotateCcw, Edit3, Trash2, ChevronDown, ChevronUp,
-  ShoppingBag, CheckCircle2
+  RotateCcw, ChevronDown, ChevronUp,
+  ShoppingBag, CheckCircle2, XCircle, Trash2
 } from 'lucide-react';
-import { Order, OrderItem, TEXT } from '../types';
+import { Order, OrderItem } from '../types';
 
 interface ProfileViewProps {
   activeOrder: Order | null;
@@ -13,6 +13,7 @@ interface ProfileViewProps {
   onTrackOrder: () => void;
   onCancelOrder: (id: string) => void;
   onEditOrder: (id: string, items: OrderItem[], arrivalTime: string, notes: string) => void;
+  onDeleteOrder: (id: string) => void;
 }
 
 /* ─── Edit Order Modal ────────────────────────────────────────────── */
@@ -312,10 +313,9 @@ const OrderSummary: React.FC<SummaryProps> = ({ order, expandedByDefault = false
 
 /* ─── Main ProfileView ────────────────────────────────────────────── */
 export const ProfileView: React.FC<ProfileViewProps> = ({
-  activeOrder, history, onTrackOrder, onCancelOrder, onEditOrder,
+  activeOrder, history, onTrackOrder, onCancelOrder, onEditOrder, onDeleteOrder,
 }) => {
-  const [showEdit, setShowEdit]             = useState(false);
-  const [isCancelling, setIsCancelling]     = useState(false);
+  const [isCancelling, setIsCancelling]       = useState(false);
   const [cancelCountdown, setCancelCountdown] = useState(4);
 
   // Cancellation countdown effect
@@ -334,8 +334,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const startCancel = () => { setIsCancelling(true); setCancelCountdown(4); };
   const undoCancel  = () => { setIsCancelling(false); setCancelCountdown(4); };
 
-  const curIdx = activeOrder ? statusIndex(activeOrder.status) : -1;
-  const canEdit   = activeOrder && (activeOrder.status === 'pending_grace_period' || activeOrder.status === 'received');
+  const curIdx    = activeOrder ? statusIndex(activeOrder.status) : -1;
   const canCancel = activeOrder && (activeOrder.status === 'pending_grace_period' || activeOrder.status === 'received');
 
   return (
@@ -346,7 +345,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-[40px] shadow-xl shadow-brand-black/5 border border-brand-black/5 overflow-hidden"
+          style={{ backgroundColor: '#ffffff' }}
+          className="rounded-[40px] shadow-xl shadow-brand-black/5 border border-brand-black/5 overflow-hidden"
         >
           {/* Progress bar at top */}
           <div className="h-1 bg-brand-black/5 w-full">
@@ -358,7 +358,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             />
           </div>
 
-          <div className="p-6">
+          <div className="p-6" style={{ backgroundColor: '#ffffff' }}>
             {/* Header row */}
             <div className="flex items-start justify-between mb-5">
               <div>
@@ -403,17 +403,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               <OrderSummary order={activeOrder} expandedByDefault />
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-3 mt-4 border-t border-brand-black/5 pt-4">
-              {canEdit && (
-                <button
-                  onClick={() => setShowEdit(true)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-brand-black/5 text-brand-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-black/10 transition-colors"
-                >
-                  <Edit3 size={16} />
-                  Επεξεργασία
-                </button>
-              )}
+            {/* Actions — Details button only (Edit removed) */}
+            <div className="flex gap-3 mt-4 border-t border-brand-black/5 pt-4 items-center">
               <button
                 onClick={onTrackOrder}
                 className="flex-1 flex items-center justify-center gap-2 py-3 bg-brand-black text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-black/90 transition-colors"
@@ -421,17 +412,16 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 <ChevronRight size={16} />
                 Λεπτομέρειες
               </button>
-            </div>
 
-            {canCancel && (
-              <button
-                onClick={startCancel}
-                className="mt-3 w-full flex items-center justify-center gap-2 py-3 border border-red-200 text-red-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-50 transition-colors"
-              >
-                <XCircle size={16} />
-                Ακύρωση Παραγγελίας
-              </button>
-            )}
+              {/* Circular animated cancel button */}
+              {canCancel && (
+                <button className="deleteButton" onClick={startCancel} title="Ακύρωση Παραγγελίας">
+                  <svg className="svgIcon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       )}
@@ -448,6 +438,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 key={order.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                layout
                 className="bg-white rounded-[32px] border border-brand-black/5 shadow-sm overflow-hidden"
               >
                 <div className="p-5">
@@ -465,8 +457,22 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                         </p>
                       </div>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${STATUS_BADGE[order.status]?.classes ?? ''}`}>
-                      {STATUS_BADGE[order.status]?.label ?? order.status}
+                    <div className="flex items-center gap-3">
+                      <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${STATUS_BADGE[order.status]?.classes ?? ''}`}>
+                        {STATUS_BADGE[order.status]?.label ?? order.status}
+                      </div>
+                      {/* Delete button — only for cancelled orders */}
+                      {order.status === 'cancelled' && (
+                        <button
+                          className="deleteButton"
+                          onClick={() => onDeleteOrder(order.id)}
+                          title="Διαγραφή"
+                        >
+                          <svg className="svgIcon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                   {/* Summary accordion per history item */}
@@ -488,19 +494,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         </div>
       )}
 
-      {/* ── Edit Modal ───────────────────────────────────────── */}
-      <AnimatePresence>
-        {showEdit && activeOrder && (
-          <EditModal
-            order={activeOrder}
-            onClose={() => setShowEdit(false)}
-            onSave={(items, arrivalTime, notes) => {
-              onEditOrder(activeOrder.id, items, arrivalTime, notes);
-              setShowEdit(false);
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Edit Modal kept in code but not triggered (Edit button removed per request) */}
 
       {/* ── Cancel Overlay ───────────────────────────────────── */}
       <AnimatePresence>
