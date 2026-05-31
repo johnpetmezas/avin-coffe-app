@@ -1,0 +1,18 @@
+{
+  "short_name": "AVIN ΣΟΛΟΜΟΣ",
+  "name": "AVIN ΣΟΛΟΜΟΣ - Παραγγελία Καφέ",
+  "description": "Παράγγειλε τον premium καφέ σου από το AVIN Σολομός και παράλαβέ τον έτοιμο!",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1A1A1A",
+  "background_color": "#1A1A1A"
+}
