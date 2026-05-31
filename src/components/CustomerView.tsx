@@ -108,15 +108,7 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEdit
               ))}
             </div>
 
-            <div>
-              <h3 className="font-black text-[10px] uppercase tracking-[0.2em] text-brand-black/30 mb-4">{TEXT.notes}</h3>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="(Π.Χ. ΖΑΧΑΡΗ, ΓΑΛΑ)"
-                className="w-full bg-brand-black/5 border-none rounded-[32px] p-6 text-sm focus:ring-1 focus:ring-brand-brown/40 min-h-[120px] outline-none transition-all placeholder:text-brand-black/20"
-              />
-            </div>
+
 
             <div>
               <h3 className="font-black text-[10px] uppercase tracking-[0.2em] text-brand-black/30 mb-4">{TEXT.timeTitle}</h3>
@@ -229,6 +221,21 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, onEdit
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {isCartExpanded && (
+                  <div className="mb-6">
+                    <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] block mb-2">
+                      ΣΗΜΕΙΩΣΕΙΣ
+                    </span>
+                    <input
+                      type="text"
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Π.χ. Ζάχαρη, Γάλα..."
+                      className="w-full bg-white/5 border border-white/10 rounded-[20px] px-5 py-3.5 text-sm focus:ring-1 focus:ring-brand-brown/40 outline-none transition-all placeholder:text-white/20"
+                    />
                   </div>
                 )}
 
