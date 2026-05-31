@@ -346,7 +346,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           style={{ backgroundColor: '#ffffff' }}
-          className="rounded-[40px] shadow-xl shadow-brand-black/5 border border-brand-black/5 overflow-hidden"
+          className="relative z-10 rounded-[40px] shadow-xl shadow-brand-black/5 border border-brand-black/5 overflow-hidden"
         >
           {/* Progress bar at top */}
           <div className="h-1 bg-brand-black/5 w-full">
