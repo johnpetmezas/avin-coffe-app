@@ -61,7 +61,7 @@ export const CustomerView: React.FC<CustomerViewProps> = ({ onPlaceOrder, active
   const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-pattern font-sans relative">
       <Header />
       
       <main className="p-6">

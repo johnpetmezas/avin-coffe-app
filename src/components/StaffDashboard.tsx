@@ -57,7 +57,7 @@ export const StaffDashboard: React.FC<StaffDashboardProps> = ({ orders, onComple
   }, [activeOrders.length, prevOrderCount]);
 
   return (
-    <div className="min-h-screen bg-brand-black/5 p-6 pt-20">
+    <div className="min-h-screen bg-pattern p-6 pt-20 relative">
       <header className="flex items-center justify-between mb-10">
         <div>
           <h1 className="text-3xl font-black text-brand-black">{TEXT.dashboard}</h1>
